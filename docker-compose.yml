@@ -1,0 +1,90 @@
+services:
+  ELNET:
+    restart: always
+    build: 
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    volumes:
+      - .:/app
+      - ./static:/home/app/static/
+      - ./media:/home/app/media/
+    image: config
+    command: /start
+    expose:
+      - 8000
+    env_file:
+      - .env
+    environment:
+      - DOCKER_DEBUG=0
+    depends_on:
+      # - redis
+      - db
+
+  nginx:
+    restart: always
+    image: nginx:latest
+    volumes:
+      - ./static:/var/www/ELNET/static/
+      - ./media:/var/www/ELNET/media/
+      - ./docker/nginx:/etc/nginx/conf.d
+    expose:
+      - 8080
+    ports:
+      - "80:8080"
+    depends_on:
+      - ELNET
+  
+  db:
+    restart: always
+    image: postgres:16.3-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    hostname: db
+    env_file:
+      - .env
+
+  # redis:
+  #   image: redis:7.2.5-alpine
+  #   expose:
+  #     - 6379
+  
+  # celery_worker:
+  #   restart: always
+  #   build: 
+  #     context: .
+  #     dockerfile: ./docker/django/Dockerfile
+  #   image: config
+  #   command: /start-celeryworker
+  #   volumes:
+  #     - .:/app
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - DOCKER_DEBUG=0
+  #   depends_on:
+  #     - redis
+  #     - db
+  #     - library
+
+  # celery_beat:
+  #   restart: always
+  #   build: 
+  #     context: .
+  #     dockerfile: ./docker/django/Dockerfile
+  #   image: config
+  #   command: /start-celerybeat
+  #   volumes:
+  #     - .:/app
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - DOCKER_DEBUG=0
+  #   depends_on:
+  #     - redis
+  #     - db
+  #     - library
+
+volumes:
+  postgres_data:
+  static:
+  media:
