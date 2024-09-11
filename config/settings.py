@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     # CORS
     'corsheaders',
+    # django_countries
+    'django_countries',
     # custom_apps
     'users.apps.UsersConfig',
     'prod_chain.apps.ProdChainConfig',

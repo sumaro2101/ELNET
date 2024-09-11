@@ -12,3 +12,4 @@ flake8==7.1.0
 gunicorn==22.0.0
 pillow==10.3.0
 loguru==0.7.2
+django-countries[pyuca]==7.6.1
