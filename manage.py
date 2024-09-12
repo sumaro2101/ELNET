@@ -3,10 +3,19 @@
 import os
 import sys
 
+from django.conf import settings
+
+from loguru import logger
+
 
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    logger.add(settings.LOGGER_LOG,
+               format=settings.LOGGER_FORMAT,
+               level=settings.LOGGER_LEVEL,
+               rotation=settings.LOGGER_ROTATION,
+               )
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

@@ -18,3 +18,15 @@ class ContactAPIViewset(CreateUpdateViewSet):
     """
     queryset = models.Contact.objects.get_queryset()
     serializer_class = serializers.ContactSerializer
+
+
+class ProdmapAPIViewser(CreateUpdateViewSet):
+    """
+    Енд поинт цепочки
+    """
+    queryset = models.ProdMap.objects.select_related('prod_object')
+
+    def get_serializer_class(self):
+        if self.action != 'update':
+            return serializers.ProdMapSerializer
+        return serializers.ProdMapUpdateSerializer 

@@ -27,6 +27,7 @@ share/python-wheels/
 MANIFEST
 database.ini
 urls.txt
+logs
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

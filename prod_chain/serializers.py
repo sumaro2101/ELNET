@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
+from django_countries.serializers import CountryFieldMixin
+
 from . import models
+from . import validators
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -12,7 +15,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ContactSerializer(serializers.ModelSerializer):
+class ContactSerializer(CountryFieldMixin, serializers.ModelSerializer):
     """Сериализатор контактов
     """
 
@@ -28,6 +31,12 @@ class ProdMapSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProdMap
         fields = '__all__'
+        validators = [
+            validators.RoleValidator('prod_object',
+                                     'supplier',
+                                     ),
+            validators.DutyCheckValidator('duty'),
+        ]
 
 
 class ProdMapUpdateSerializer(serializers.ModelSerializer):
@@ -37,3 +46,8 @@ class ProdMapUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProdMap
         exclude = ('duty',)
+        validators = [
+            validators.RoleValidator('prod_object',
+                                     'supplier',
+                                     ),
+        ]
