@@ -1,10 +1,11 @@
 from rest_framework import generics, viewsets
 
+from .viewsets import CreateUpdateViewSet
 from . import models, serializers
 
 
-class CreateProductAPIView(viewsets.ModelViewSet):
+class ProductAPIView(CreateUpdateViewSet):
     """Создание товара
     """
-    queryset = models.Product
+    queryset = models.Product.objects.get_queryset()
     serializer_class = serializers.ProductSerializer
