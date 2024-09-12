@@ -11,7 +11,10 @@ app_name = ProdChainConfig.name
 
 router = DefaultRouter()
 router.register(r'api/products',
-                views.ProductAPIView,
+                views.ProductAPIViewset,
+                )
+router.register(r'api/contacts',
+                views.ContactAPIViewset,
                 )
 
 
