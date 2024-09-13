@@ -1,8 +1,10 @@
 from typing import Any, Dict, List
 
+from loguru import logger
 from rest_framework.serializers import ModelSerializer
 
 
+@logger.catch(reraise=True)
 def get_value(field: str,
               attrs: Dict,
               serializer: ModelSerializer,
@@ -25,10 +27,10 @@ def get_value(field: str,
                 value = field.default
             else:
                 value = None
-
+    logger.debug(f'From func {get_value.__name__} From field {field} get value {value}')
     return value
 
-
+@logger.catch(reraise=True)
 def tigger_to_check(attrs: Dict,
                     *fields: List,
                     ) -> bool:
@@ -38,4 +40,5 @@ def tigger_to_check(attrs: Dict,
     for field in fields:
         if field in attrs.keys():
             need_check = True
+    logger.debug(f'From func {tigger_to_check.__name__} Need to check - {need_check} for fields {fields} in attrs {attrs}')
     return need_check

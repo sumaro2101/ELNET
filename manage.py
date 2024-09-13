@@ -15,6 +15,7 @@ def main():
                format=settings.LOGGER_FORMAT,
                level=settings.LOGGER_LEVEL,
                rotation=settings.LOGGER_ROTATION,
+               compression=settings.LOGGER_COMPRESSION,
                )
     try:
         from django.core.management import execute_from_command_line

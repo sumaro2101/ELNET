@@ -16,7 +16,9 @@ router.register(r'api/products',
 router.register(r'api/contacts',
                 views.ContactAPIViewset,
                 )
-
+router.register(r'api/prod-map',
+                views.ProdmapAPIViewset,
+                )
 
 urlpatterns = [
     path('', include(router.urls)),

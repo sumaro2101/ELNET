@@ -1,7 +1,5 @@
 from datetime import date
 
-from loguru import logger
-
 from django.test import TestCase
 from rest_framework.validators import ValidationError
 
@@ -10,6 +8,8 @@ from prod_chain.models import (ProdMap,
                                Contact,
                                )
 from prod_chain.validators import (ProductListValidator,
+                                   DutyCheckValidator,
+                                   RoleValidator,
                                    )
 
 
@@ -71,5 +71,86 @@ class TestValidators(TestCase):
                      products=[self.product_1.pk, self.product_2.pk, 44])
         validator = ProductListValidator('products', 'supplier')
 
+        with self.assertRaises(ValidationError):
+            validator(attrs, self.serializer)
+
+    def test_validator_duty_validator(self):
+        """
+        Тест валидатора на долг
+        """
+        attrs = dict(duty=10.00)
+        validator = DutyCheckValidator('duty')
+        
+        self.assertIsNone(validator(attrs))
+
+    def test_validator_duty_validator_fail(self):
+        """
+        Тест провальной валидации
+        """
+        attrs = dict(duty=-33.00)
+        validator = DutyCheckValidator('duty')
+        
+        with self.assertRaises(ValidationError):
+            validator(attrs)
+
+    def test_validator_role(self):
+        """
+        Тест валидатора роли
+        """
+        contact = Contact.objects.create(
+            **dict(name="test_1",
+                    role="retail",
+                    email='test_1@gmail.com',
+                    country='RU',
+                    town='Омск',
+                    street='Ул.Химиков',
+                    build='55Б',
+                    )
+        )
+        attrs = dict(prod_object=contact,
+                     supplier=self.net_chain,
+                    )
+        validator = RoleValidator('prod_object',
+                                  'supplier')
+        self.assertIsNone(validator(attrs, self.serializer))
+
+    def test_validator_role(self):
+        """
+        Тест провальной валидации
+        """
+        contact = Contact.objects.create(
+            **dict(name="test_1",
+                    role="retail",
+                    email='test_1@gmail.com',
+                    country='RU',
+                    town='Омск',
+                    street='Ул.Химиков',
+                    build='55Б',
+                    )
+        )
+        net_chain = ProdMap.objects.create(
+            **dict(
+                prod_object=contact,
+                supplier=self.net_chain,
+                duty=0,
+            ),
+        )
+        net_chain.products.add(self.product_1)
+        net_chain.products.add(self.product_2)
+        prod_object = Contact.objects.create(
+            **dict(name="test_2",
+                    role="factory",
+                    email='test_1@gmail.com',
+                    country='RU',
+                    town='Омск',
+                    street='Ул.Химиков',
+                    build='55Б',
+                    )
+        )
+        attrs = dict(prod_object=prod_object,
+                     supplier=net_chain,
+                    )
+        validator = RoleValidator('prod_object',
+                                  'supplier')
         with self.assertRaises(ValidationError):
             validator(attrs, self.serializer)

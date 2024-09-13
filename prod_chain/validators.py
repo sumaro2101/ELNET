@@ -23,6 +23,7 @@ class RoleValidator:
     requires_context = True
     FACTORY = 'factory'
 
+    @logger.catch(reraise=True)
     def __init__(self,
                  current_obj: str,
                  supplier: str,
@@ -38,7 +39,7 @@ class RoleValidator:
         self.current_obj = current_obj
         self.supplier = supplier
 
-    @logger.catch
+    @logger.catch(reraise=True, exclude=ValidationError)
     def _check_role(self,
                     current_obj: Contact,
                     supplier: Optional[ProdMap],
@@ -46,8 +47,10 @@ class RoleValidator:
         """Проверка аерархии ролей
         """
         role = current_obj.role
+        logger.debug(f'{self.__class__.__name__} get role: {role} and supplier: {supplier}')
         if supplier:
-            supplier_role = supplier.current_obj.role
+            supplier_role = supplier.prod_object.role
+            logger.debug(f'{self.__class__.__name__} get supplier_role: {supplier_role}')
             if role == self.FACTORY and supplier_role != self.FACTORY:
                 raise ValidationError(
                     dict(
@@ -75,7 +78,8 @@ class DutyCheckValidator:
     """
     Валидатор проверки долга
     """
-    
+
+    @logger.catch(reraise=True)
     def __init__(self,
                  duty: str,
                  ) -> None:
@@ -85,10 +89,11 @@ class DutyCheckValidator:
                 )
         self.duty = duty
 
-    @logger.catch
+    @logger.catch(reraise=True, exclude=ValidationError)
     def _check_duty_decimal(self,
                             duty: Decimal,
                             ):
+        logger.debug(f'{self.__class__.__name__} get value duty: {duty}')
         if duty is not None:
             if duty < 0:
                 raise ValidationError(
@@ -111,6 +116,7 @@ class ProductListValidator:
     """
     requires_context = True
 
+    @logger.catch(reraise=True)
     def __init__(self,
                  products: str,
                  supplier: str,
@@ -145,7 +151,7 @@ class ProductListValidator:
             set_of_prod = set(products)
         return set_of_prod, set_of_supp_prod
 
-    @logger.catch(reraise=True)
+    @logger.catch(reraise=True, exclude=ValidationError)
     def _check_correct_list_products(self,
                                      products: list[int],
                                      supplier_products: QuerySet[Product],
@@ -154,8 +160,8 @@ class ProductListValidator:
             products=products,
             supplier_products=supplier_products,
         )
-        logger.debug(f'ProductListValidator: products: {products}')
-        logger.debug(f'ProductListValidator: supplier_products: {supplier_products}')
+        logger.debug(f'{self.__class__.__name__}: products: {products}')
+        logger.debug(f'{self.__class__.__name__}: supplier_products: {supplier_products}')
         has_extra_products = products - supplier_products
         if has_extra_products:
             raise ValidationError(
@@ -169,7 +175,7 @@ class ProductListValidator:
             supplier = get_value(self.supplier, attrs, serializer)
             if supplier:
                 supplier_products = supplier.products.all()
-                logger.debug(f'ProductListValidator: attrs {attrs}')
+                logger.debug(f'{self.__class__.__name__}: attrs {attrs}')
                 self._check_correct_list_products(products=products,
                                                   supplier_products=supplier_products,
                                                   )

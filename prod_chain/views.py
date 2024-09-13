@@ -1,4 +1,4 @@
-from rest_framework import generics, viewsets
+from loguru import logger
 
 from .viewsets import CreateUpdateViewSet
 from . import models, serializers
@@ -20,13 +20,16 @@ class ContactAPIViewset(CreateUpdateViewSet):
     serializer_class = serializers.ContactSerializer
 
 
-class ProdmapAPIViewser(CreateUpdateViewSet):
+class ProdmapAPIViewset(CreateUpdateViewSet):
     """
     Енд поинт цепочки
     """
     queryset = models.ProdMap.objects.select_related('prod_object')
 
     def get_serializer_class(self):
-        if self.action != 'update':
+        logger.debug(f'{self.__class__.__name__} get action: {self.action}')
+        if self.action != 'partial_update':
+            logger.debug(f'{self.__class__.__name__} is return serializer: ProdMapSerializer')
             return serializers.ProdMapSerializer
+        logger.debug(f'{self.__class__.__name__} is return serializer: ProdMapUpdateSerializer ')
         return serializers.ProdMapUpdateSerializer 
