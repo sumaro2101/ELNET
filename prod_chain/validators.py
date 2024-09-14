@@ -1,8 +1,8 @@
 from rest_framework.validators import ValidationError
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Model
 
-from typing import Any, Optional, Union
+from typing import Any, List, Optional, Union
 
 from decimal import Decimal
 
@@ -134,9 +134,13 @@ class ProductListValidator:
 
     @logger.catch(reraise=True)
     def _handle_queryset_to_pk_set(self,
-                                    supplier_products: QuerySet[Product],
+                                    supplier_products: Union[QuerySet[Product],
+                                                             List[Model]],
                                     ) -> set[int]:
-        list_of_pk = (item[0] for item in supplier_products.values_list('pk'))
+        if isinstance(supplier_products, list):
+            list_of_pk = (item.pk for item in supplier_products)
+        else:
+            list_of_pk = (item[0] for item in supplier_products.values_list('pk'))
         return set(list_of_pk)
 
     @logger.catch(reraise=True)
@@ -145,7 +149,7 @@ class ProductListValidator:
                            supplier_products: QuerySet[Product],
                            ) -> tuple[set[int]]:
         set_of_supp_prod = self._handle_queryset_to_pk_set(supplier_products)
-        if isinstance(products, QuerySet):
+        if isinstance(products, (QuerySet, List)):
             set_of_prod = self._handle_queryset_to_pk_set(products)
         else:
             set_of_prod = set(products)

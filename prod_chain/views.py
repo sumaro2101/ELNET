@@ -28,8 +28,11 @@ class ProdmapAPIViewset(CreateUpdateViewSet):
 
     def get_serializer_class(self):
         logger.debug(f'{self.__class__.__name__} get action: {self.action}')
-        if self.action != 'partial_update':
-            logger.debug(f'{self.__class__.__name__} is return serializer: ProdMapSerializer')
-            return serializers.ProdMapSerializer
-        logger.debug(f'{self.__class__.__name__} is return serializer: ProdMapUpdateSerializer ')
-        return serializers.ProdMapUpdateSerializer 
+        if self.action == 'partial_update':
+            logger.debug(f'{self.__class__.__name__} is return serializer: ProdMapUpdateSerializer')
+            return serializers.ProdMapUpdateSerializer
+        if self.action == 'create':
+            logger.debug(f'{self.__class__.__name__} is return serializer: ProdMapCreateSerializer')
+            return serializers.ProdMapCreateSerializer
+        logger.debug(f'{self.__class__.__name__} is return serializer: ProdMapSerializer')
+        return serializers.ProdMapSerializer
