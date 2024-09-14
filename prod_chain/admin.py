@@ -4,6 +4,7 @@ from django.contrib import messages
 
 from .models import Product, ProdMap, Contact
 from .admin_filters import CountiesListFilter
+from .admin_form import ProdMapAdminForm
 
 
 @admin.register(Product)
@@ -29,6 +30,7 @@ class ProdMapAdminView(admin.ModelAdmin):
     list_select_related = ('prod_object', 'supplier',)
     list_max_show_all = 50
     list_per_page = 35
+    form = ProdMapAdminForm
     filter_horizontal = (
         'products',
     )
