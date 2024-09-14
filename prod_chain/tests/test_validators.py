@@ -58,7 +58,7 @@ class TestValidators(TestCase):
         Тест валидатора на проверку продуктов
         """
         attrs = dict(supplier=self.net_chain,
-                     products=[self.product_1.pk])
+                     products=[self.product_1])
         validator = ProductListValidator('products', 'supplier')
         
         self.assertIsNone(validator(attrs, self.serializer))
@@ -67,8 +67,12 @@ class TestValidators(TestCase):
         """
         Тест провальной валидации
         """
+        product_3 = Product.objects.create(**dict(name="test_3",
+                                                  model="test_model_3",
+                                                  realize=date.today(),
+                                                  ))
         attrs = dict(supplier=self.net_chain,
-                     products=[self.product_1.pk, self.product_2.pk, 44])
+                     products=[self.product_1, self.product_2, product_3])
         validator = ProductListValidator('products', 'supplier')
 
         with self.assertRaises(ValidationError):
