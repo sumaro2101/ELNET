@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from django_countries.serializers import CountryFieldMixin
+from django.db import connection
+from loguru import logger
 
 from . import models
 from . import validators
@@ -32,7 +34,17 @@ class SupplierField(serializers.StringRelatedField):
 class ProdMapSerializer(serializers.ModelSerializer):
     products = serializers.StringRelatedField(many=True)
     prod_object = serializers.StringRelatedField()
-    supplier = SupplierField()
+    supplier_name = serializers.SerializerMethodField()
+    supplier = serializers.HyperlinkedRelatedField(read_only=True,
+                                                   view_name='chains:prodmap-detail',
+                                                   )
+
+    def get_supplier_name(self, obj):
+        supplier = obj.supplier
+        if supplier:
+            result = f'{supplier.prod_object.role} {supplier.prod_object.name}'
+            logger.debug(f'Count queries {len(connection.queries)}')
+            return result
 
     class Meta:
         model = models.ProdMap

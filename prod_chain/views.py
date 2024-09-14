@@ -3,7 +3,7 @@ from loguru import logger
 from django_filters.rest_framework import backends as filters
 
 from .viewsets import CreateUpdateViewSet
-from . import models, serializers
+from . import models, serializers, paginators
 
 
 class ProductAPIViewset(CreateUpdateViewSet):
@@ -25,6 +25,7 @@ class ContactAPIViewset(CreateUpdateViewSet):
     """
     queryset = models.Contact.objects.get_queryset()
     serializer_class = serializers.ContactSerializer
+    pagination_class = paginators.BasePaginate
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ('name',
                         'role',
@@ -40,8 +41,11 @@ class ProdmapAPIViewset(CreateUpdateViewSet):
     """
     Енд поинт цепочки
     """
-    queryset = models.ProdMap.objects.select_related('prod_object')
+    queryset = (models.ProdMap.objects.
+                select_related('prod_object', 'supplier__prod_object').
+                prefetch_related('products'))
     filter_backends = [filters.DjangoFilterBackend]
+    pagination_class = paginators.BasePaginate
     filterset_fields = ('prod_object',
                         'products',
                         'supplier',
@@ -61,7 +65,7 @@ class ProdmapAPIViewset(CreateUpdateViewSet):
         return serializers.ProdMapSerializer
 
     def get_queryset(self):
-        prod_map = models.ProdMap.objects.get_queryset()
+        prod_map = super().get_queryset()
         query_params = self.request.query_params
         if country := query_params.get('country'):
             logger.debug(f'query_params get country with value {country}')
