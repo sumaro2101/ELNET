@@ -24,7 +24,22 @@ class ContactSerializer(CountryFieldMixin, serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SupplierField(serializers.StringRelatedField):
+    def to_representation(self, value):
+        return str(value.prod_object)
+
+
 class ProdMapSerializer(serializers.ModelSerializer):
+    products = serializers.StringRelatedField(many=True)
+    prod_object = serializers.StringRelatedField()
+    supplier = SupplierField()
+
+    class Meta:
+        model = models.ProdMap
+        fields = '__all__'
+
+
+class ProdMapCreateSerializer(serializers.ModelSerializer):
     """Сериализатор цепочки
     """
 
@@ -36,6 +51,7 @@ class ProdMapSerializer(serializers.ModelSerializer):
                                      'supplier',
                                      ),
             validators.DutyCheckValidator('duty'),
+            validators.ProductListValidator('products', 'supplier',)
         ]
 
 
@@ -50,4 +66,5 @@ class ProdMapUpdateSerializer(serializers.ModelSerializer):
             validators.RoleValidator('prod_object',
                                      'supplier',
                                      ),
+            validators.ProductListValidator('products', 'supplier',)
         ]
