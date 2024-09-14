@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from rest_framework import permissions
 
@@ -38,6 +38,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('', include('users.urls', namespace='users')),
+    path('', include('prod_chain.urls', namespace='chains')),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),
          name='schema-redoc'),
 ]

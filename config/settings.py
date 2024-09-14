@@ -28,6 +28,17 @@ SECRET_KEY = find_env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = find_env('TEST')
 
+LOGGER_LOG = find_env('LOGGER_LOG')
+
+LOGGER_FORMAT = '{time} {level} {message}'
+
+LOGGER_LEVEL = find_env('LOGGER_LEVEL')
+
+LOGGER_ROTATION = find_env('LOGGER_ROTATION')
+
+LOGGER_COMPRESSION = find_env('LOGGER_COMPRESSION')
+
+
 ALLOWED_HOSTS = [find_env('ALLOWED_HOSTS'), 'localhost']
 
 
@@ -55,6 +66,11 @@ INSTALLED_APPS = [
     'phonenumber_field',
     # CORS
     'corsheaders',
+    # django_countries
+    'django_countries',
+    # custom_apps
+    'users.apps.UsersConfig',
+    'prod_chain.apps.ProdChainConfig',
 ]
 
 MIDDLEWARE = [
@@ -171,3 +187,5 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = 'users.User'

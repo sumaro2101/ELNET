@@ -1,0 +1,188 @@
+[
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$LNu1zGeH5tFhscIPHrTXwb$6rFZ9z6fnQeVMElZPpQ0XQbroZXfZNWyO514tuZivHA=",
+            "last_login": "2024-09-11T17:08:37.232Z",
+            "is_superuser": true,
+            "username": "root",
+            "first_name": "",
+            "last_name": "",
+            "email": "root@gmail.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-09-11T17:08:19.429Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$TFpr1V5arwKHw30e8fDhSi$duz/vPqx2H58EqMDE8Wl/9BhrPIgcpHgOEnlp/jfm6o=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "employeer",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": false,
+            "date_joined": "2024-09-13T17:34:25Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "prod_chain.product",
+        "pk": 1,
+        "fields": {
+            "name": "ASUS",
+            "model": "Strix",
+            "realize": "2013-03-23"
+        }
+    },
+    {
+        "model": "prod_chain.product",
+        "pk": 2,
+        "fields": {
+            "name": "Lenovo",
+            "model": "Legion",
+            "realize": "2023-03-23"
+        }
+    },
+    {
+        "model": "prod_chain.product",
+        "pk": 3,
+        "fields": {
+            "name": "Samsung",
+            "model": "Galaxy",
+            "realize": "2023-03-23"
+        }
+    },
+    {
+        "model": "prod_chain.contact",
+        "pk": 1,
+        "fields": {
+            "name": "ASUS",
+            "role": "factory",
+            "email": "asus@asus.com",
+            "country": "US",
+            "town": "sometown",
+            "street": "somestreet",
+            "build": "223D"
+        }
+    },
+    {
+        "model": "prod_chain.contact",
+        "pk": 2,
+        "fields": {
+            "name": "Lenovo",
+            "role": "factory",
+            "email": "Lenovo@Lenovo.com",
+            "country": "US",
+            "town": "sometown",
+            "street": "somestreet",
+            "build": "223D"
+        }
+    },
+    {
+        "model": "prod_chain.contact",
+        "pk": 3,
+        "fields": {
+            "name": "some",
+            "role": "retail",
+            "email": "some@mdsadpd.dsd",
+            "country": "AX",
+            "town": "dams",
+            "street": "dsad",
+            "build": "dead"
+        }
+    },
+    {
+        "model": "prod_chain.prodmap",
+        "pk": 1,
+        "fields": {
+            "prod_object": 1,
+            "supplier": null,
+            "duty": "0.00",
+            "appoiment_date": "2024-09-13T18:00:29.027Z",
+            "products": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "prod_chain.prodmap",
+        "pk": 2,
+        "fields": {
+            "prod_object": 2,
+            "supplier": 1,
+            "duty": "0.00",
+            "appoiment_date": "2024-09-13T18:01:05.488Z",
+            "products": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "prod_chain.prodmap",
+        "pk": 5,
+        "fields": {
+            "prod_object": 3,
+            "supplier": 1,
+            "duty": "0.00",
+            "appoiment_date": "2024-09-14T07:31:14.482Z",
+            "products": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "prod_chain.prodmap",
+        "pk": 6,
+        "fields": {
+            "prod_object": 2,
+            "supplier": 1,
+            "duty": "40000.00",
+            "appoiment_date": "2024-09-14T20:09:41.362Z",
+            "products": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "prod_chain.prodmap",
+        "pk": 7,
+        "fields": {
+            "prod_object": 1,
+            "supplier": 1,
+            "duty": "40000.00",
+            "appoiment_date": "2024-09-14T20:09:51.198Z",
+            "products": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "prod_chain.prodmap",
+        "pk": 8,
+        "fields": {
+            "prod_object": 1,
+            "supplier": 1,
+            "duty": "40000.00",
+            "appoiment_date": "2024-09-14T20:09:52.596Z",
+            "products": [
+                1,
+                2
+            ]
+        }
+    }
+]
